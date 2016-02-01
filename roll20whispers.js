@@ -35,8 +35,9 @@ $(document).ready(function() {
 		for (var i = 0; i < e.target.classList.length; i++) {
 			if (e.target.classList[i] === "message") {
 				var cleansedMsg = cleanseMessageText($(e.target).text());
-				//console.log(cleansedMsg);
+				console.log(cleansedMsg);
 				parseMsg(cleansedMsg);
+				break; //stop the loop after message is found
 			}
 		}
 	});
@@ -119,7 +120,6 @@ var commands = [
 				controller: critFailModController
 			}
 		],
-		}
 		controller: critFailController
 	},
 	{
