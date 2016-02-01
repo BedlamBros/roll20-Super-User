@@ -1,0 +1,16 @@
+{
+  "name": "roll20su",
+  "version": "1.0.0",
+  "description": "A chrome extension to enhance your roll20 experience",
+  "main": "app.js",
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "keywords": [
+    "roll20",
+    "chrome",
+    "extension"
+  ],
+  "author": "@FajitaMane",
+  "license": "ISC"
+}
