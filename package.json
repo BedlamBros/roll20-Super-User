@@ -1,5 +1,5 @@
 {
-  "name": "roll20su",
+  "name": "Roll20-Super-User",
   "version": "1.0.0",
   "description": "A chrome extension to enhance your roll20 experience",
   "main": "app.js",
@@ -12,5 +12,18 @@
     "extension"
   ],
   "author": "@FajitaMane",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "expect": "^1.13.4",
+    "expect.js": "^0.3.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BedlamBros/roll20-super-user"
+  },
+  "bugs": {
+    "url": "https://github.com/BedlamBros/roll20-super-user/issues"
+  },
+  "homepage": "https://github.com/BedlamBros/roll20-super-user"
 }
