@@ -3,14 +3,20 @@
 	<link rel="stylesheet" type="text/css" href="options.css">
 	<h1>Enter Characters</h1>
 
-	<input type="text" id="player1" />
-	<input type="text" id="player2" />
-	<input type="text" id="player3" />
-	<input type="text" id="player4" />
-	<input type="text" id="player5" />
+	<table id="charTable">
+		<tr id="header">
+			<td> <b>Character Name</b> </td>
+			<td> <b>Character Owner</b> </td>
+			<td> <b>Gender Pronoun</b> </td>
+		</tr>
+		<tr>
+			<td> <input type="text" maxLength="20" id="charName" /> </td>
+			<td> <input type="text" maxLength="20" id="colloqName" /> </td>
+			<td> <input type="text" maxLength="5" id="genderPronoun" /> </td>			
+	</table>
 
 	<button id="saveButton">Save</button>
 
-	<script src="jquery-1.12.0.min.js"></script>
+	<script src="../js/jquery-1.12.0.min.js"></script>
 	<script src="options.js"></script>
 </html>

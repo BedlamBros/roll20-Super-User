@@ -1,19 +1,27 @@
 var CHAR_LIMIT = 10;
 var INPUTS_ON_SCREEN = 5;
 
-function saveOptions() {
+function saveNewCharacter() {
 	var charList = [];
 	for (i = 1; i <= 5; i++){
-		var text = document.getElementById('player' + i).value;
-		if (text != ''){
-			console.log("adding player " + text);
-			charList[charList.length] = text;
+		var character = {};
+		var charName = document.getElementById('charName').value;
+		var colloqName = document.getElementById('colloqName').value;
+		var genderPronoun = document.getElementById('genderPronoun').value;
+		if (charName == '' || colloqName == '' || genderPronoun == ''){
+			alert('No fields may be empty');
+			return;
 		}
+		character.charName = charName;
+		character.colloqName = colloqName;
+		character.genderPronoun = genderPronoun;
+		charList[charList.length] = character;
 	}
 	chrome.storage.sync.set({
 		charList: charList
 	  }, function() {
 	  	document.getElementById('saveButton').visibility = 'none';
+	  	alert(charName + " saved");
 	  	location.reload();
 	  }
 	);
@@ -28,7 +36,7 @@ function restoreOptions() {
 		charList: []
 	}, function(items) {
 		for (var i = 0; i < items.charList.length; i++) {
-			console.log("recovered " + items.charList[i]);
+			console.log("recovered " + items.charList.length);
 		}
 		//if a charList is saved
 		if (items.charList.length > 0) {
@@ -41,29 +49,22 @@ function restoreOptions() {
 					+ " Characters to the List";
 				$("#saveButton").html("Add Characters");				
 			}
-
-			//remove unneeded input elements
-			var textInputs = $('input');
-			for (var i = 0; i < textInputs.length; i++) {
-				if (i > CHAR_LIMIT - items.charList.length){
-					textInputs[i].remove();
-				}
-			}
-				
-			//insert the saved characters
-			var hr = $("<hr>");
-			hr.insertAfter($("#saveButton"));
-			var h1 = $("<h1>");
-			h1.insertAfter($("hr")[0]);
-			$(h1).html("Existing Characters");
 			for (var i = 0; i < items.charList.length; i++) {
-				var p = $("<p>", {class: "character"});
-				p.html(items.charList[i]);
-				p.insertAfter($("h1")[1]);
+				var tr = $('<tr>');
+				var td1 = $('<td>');
+				td1.html(items.charList[i].charName);
+				$(tr).append(td1);
+				var td2 = $('<td>');
+				td2.html(items.charList[i].colloqName);
+				$(tr).append(td2);
+				var td3 = $('<td>');
+				td3.html(items.charList[i].genderPronoun);
+				$(tr).append(td3);
+				$("#header").after(tr);
 			}
 		}
 	});
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
-document.getElementById('saveButton').addEventListener('click', saveOptions);
+document.getElementById('saveButton').addEventListener('click', saveNewCharacter);

@@ -3,23 +3,28 @@
 var mockCharList = [
 	{
 		colloqName: "Cedric F.",
-		charName: "Cedric"
+		charName: "Cedric",
+		genderPronoun: "his"
 	},
 	{
 		colloqName: "Ian B.",
-		charName: "Furio"
+		charName: "Furio",
+		genderPronoun: "his"
 	},
 	{
 		colloqName: "Wenwrick",
-		charName: "Wenwrick"
+		charName: "Wenwrick",
+		genderPronoun: "his"
 	},
 	{
 		colloqName: "Keira M.",
-		charName: "Keira"		
+		charName: "Keira",
+		genderPronoun: "her"		
 	},
 	{
 		colloqName: "Karanthos",
-		charName: "Karanthos"	
+		charName: "Karanthos",
+		genderPronoun: "his"
 	}
 ];
 
