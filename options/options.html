@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-	<link rel="stylesheet" type="text/css" href="options.css">
+	<link rel="stylesheet" type="text/css" href="../styles/options.css">
+	<link rel="stylesheet" type="text/css" href="../styles/jquery-ui.css">
 	<h1>Enter Characters</h1>
 
 	<table id="charTable">
@@ -17,6 +18,12 @@
 
 	<button id="saveButton">Save</button>
 
+	<div id="dialog" title="Enter a Whisper">
+		<textarea id="dialogTextArea"></textarea>
+		<button id="dialogSaveButton">Save Whisper</button>
+	</div>
+
 	<script src="../js/jquery-1.12.0.min.js"></script>
+	<script src="../js/jquery-ui.js"></script>
 	<script src="options.js"></script>
 </html>

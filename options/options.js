@@ -62,22 +62,27 @@ function restoreOptions() {
 		}
 		//if a charList is saved
 		if (items.charList.length > 0) {
+			if (items.charList.length > 9) { //limit of characters
+				$('#saveButton').css('visibility', 'none');
+			}
 			document.getElementById('saveButton').addEventListener('click', addNewCharacter);
 			//change the top h1
 			if (items.charList.length == CHAR_LIMIT) {
 				$("h1").innerHTML = "Character List Maxed At " + CHAR_LIMIT;
 			} else {
-				$("h1")[0].innerHTML = "Add Up To" 
+				$("h1")[0].innerHTML = "Add Up To " 
 					+ (CHAR_LIMIT - items.charList.length) 
 					+ " Characters to the List";
 				$("#saveButton").html("Add Characters");
-				$()			
 			}
 			for (var i = 0; i < items.charList.length; i++) {
 				var tr = $('<tr>');
 				$(tr).css("cursor", "pointer");
+				//add a click handler that opens the whisper dialog
 				$(tr).on('click', function() {
-					alert('enter a whisper for this character');
+					$('#dialog').dialog();
+					var charClicked = $($(this).children()[0]).text();
+					$($('.ui-dialog-title')[0]).text('Enter A Whisper For ' + charClicked);
 				});
 				var td1 = $('<td>');
 				td1.html(items.charList[i].charName);
@@ -94,6 +99,32 @@ function restoreOptions() {
 			document.getElementById('saveButton').addEventListener('click', saveNewCharacter);
 		}
 	});
+}
+
+function saveWhisperForCharacter(charName, whisper) {
+	chrome.storage.sync.get({
+			charList: []
+		}, function(items) {
+			var charList = items.charList;
+			for (var i = 0; i < charList.length; i++) {
+				if (charList[i].charName == charName) {
+					if (charList[i].whispers) {
+						charList[i].whispers[charList[i].whispers.length] = whisper;
+					} else {
+						charList[i].whispers = [];
+						charList[i].whispers[0] = whisper;
+					}
+					break;
+				}
+			}
+			//save after whisper has been added to charList
+			chrome.storage.sync.set({
+			charList: charList
+		  }, function() {
+		  	location.reload();
+		  }
+		);
+		});	
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
