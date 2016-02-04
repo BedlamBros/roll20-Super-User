@@ -194,8 +194,10 @@ var reactionResults = [
 	}
 ];
 
-//models
-var commands = [
+/*
+** Models
+------------------
+*/var commands = [
 	{
 		name: "Crit Fail",
 		cmd: "fail",
@@ -222,3 +224,15 @@ function parseMsg(msg, name) {
 		}
 	}
 }
+
+/*
+** Chrome commands
+------------------
+*/
+chrome.commands.onCommand.addListenener(function(command) {
+	console.log(command);
+	if (command === "start-character-crawl") {
+		console.log("crawling char data");
+		alert("please do not touch the keyboard or mouse while character data is being collected");
+	}
+});
