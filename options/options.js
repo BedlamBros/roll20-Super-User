@@ -1,5 +1,6 @@
 var CHAR_LIMIT = 10;
 var INPUTS_ON_SCREEN = 5;
+var USER_IS_DM = false;
 
 function saveNewCharacter() {
 	var charList = [];
@@ -65,24 +66,31 @@ function restoreOptions() {
 			if (items.charList.length > 9) { //limit of characters
 				$('#saveButton').css('visibility', 'none');
 			}
-			document.getElementById('saveButton').addEventListener('click', addNewCharacter);
+			if (USER_IS_DM) {
+				document.getElementById('saveButton').addEventListener('click', addNewCharacter);				
+			}
 			//change the top h1
 			if (items.charList.length == CHAR_LIMIT) {
 				$("h1").innerHTML = "Character List Maxed At " + CHAR_LIMIT;
 			} else {
-				$("h1")[0].innerHTML = "Add Up To " 
-					+ (CHAR_LIMIT - items.charList.length) 
-					+ " Characters to the List";
+				if (USER_IS_DM){
+					$("h1")[0].innerHTML = "Add Up To " 
+						+ (CHAR_LIMIT - items.charList.length) 
+						+ " Characters to the List";					
+				} else {
+					$("h1")[0].innerHTML = "Click Your Character to Set Known Languages";
+				}
 				$("#saveButton").html("Add Characters");
 			}
 			for (var i = 0; i < items.charList.length; i++) {
 				var tr = $('<tr>');
+				$(tr).addClass('charRow');
 				$(tr).css("cursor", "pointer");
 				//add a click handler that opens the whisper dialog
 				$(tr).on('click', function() {
-					$('#dialog').dialog();
+					$('#dialogLang').dialog();
 					var charClicked = $($(this).children()[0]).text();
-					$($('.ui-dialog-title')[0]).text('Enter A Whisper For ' + charClicked);
+					$($('.ui-dialog-title')[0]).text('Select All Languages Spoken By ' + charClicked);
 				});
 				var td1 = $('<td>');
 				td1.html(items.charList[i].charName);
@@ -94,11 +102,38 @@ function restoreOptions() {
 				td3.html(items.charList[i].genderPronoun);
 				$(tr).append(td3);
 				$("#header").after(tr);
+				//break if the user is not a dm
+				if (!USER_IS_DM) {
+					$('#saveButton').css('display', 'none');
+					$('#inputRow').css('display', 'none');
+					return;
+				}
 			}
 		} else {
 			document.getElementById('saveButton').addEventListener('click', saveNewCharacter);
 		}
 	});
+}
+
+function saveLanguagesForCharacter(charName, languages) {
+	chrome.storage.sync.get({
+		charLanguages: {}
+	}), function(items) {
+		var charLanguages = items.charLanguages;
+		if (charLangauges) {
+			console.log("char languages of " + charLanguages + " already have been saved, overwriting");
+		}
+	}
+}
+
+function buildCharLanguagesObjectFromDOM() {
+	var knowsAbyssal = $('#abyssalCheckbox').is(':checked');
+	var konwsDwarven = $('#dwarvenCheckbox').is(':checked');
+	var knowsElven = $('#elvenCheckbox').is(':checked');
+	var knowsDeepSpeech = $('#deepSpeechCheckbox').is(':checked');
+	var knowsGiant = $('#giantCheckbox').is(':checked');
+	var charLanguages = {};
+	
 }
 
 function saveWhisperForCharacter(charName, whisper) {
@@ -126,5 +161,23 @@ function saveWhisperForCharacter(charName, whisper) {
 		);
 		});	
 }
+
+//returns boolean if browser can support unicode
+function browserIsUnicodeCompliant() {
+	return document.getElementById('unicodeContainer').offsetWidth ===
+        document.getElementById('unprintableContainer').offsetWidth;
+}
+
+$(document).ready(function() {
+	//test browser support for utf-8
+	if (!browserIsUnicodeCompliant()) {
+		$('#unicodeTestResult').css('color', 'GREEN');
+		$('#unicodeTestResult').html('&#x2713; Your browser supports the languages used in this extension');
+	} else {
+		$('#unicodeTestResult').css('color', 'RED');
+		$('#unicodeTestResult').html('&#10007; Your browser does not support the languages used in this extension.\n
+			Try switching to chrome if you are on a different browser or upgrading to the latest version.');
+	}
+});
 
 document.addEventListener('DOMContentLoaded', restoreOptions);

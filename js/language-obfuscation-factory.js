@@ -3,18 +3,18 @@ var elvenLang = {
 	spaceFrequency: 0.20,
 	spaceChar: "\ ",
 	terseness: 0.80,
-	commands: ["elven", "elvish", "elf"]
+	commands: ["elven", "elvish", "elf", "elvin"]
 };
 
 var dwarvenLang = {
-	charSet: "ሑቄቕሗሧቹሙለሯኞኯሿኅኲኴፅዺዅዂዐ፬",
+	charSet: "ሑቄቕሗሧቹሙለሯኞኯሿኅኲኴፅዺዅዂዐ፬ቊ",
 	spaceFrequency: 0.10,
 	spaceChar: "\n",
 	terseness: 1.25,
-	commands: ["dwarven", "dwarf"]
+	commands: ["dwarven", "dwarf", "dwarvin"]
 };
 
-var draconicLang = {
+var deepSpeechLang = {
 	charSet: "ᚡᚱᛑᛰᚸᛦᛤᛥᛝᚬᚯᚿᛟᛯᛔᛯᚥᛰᛢ",
 	spaceFrequency: 0.10,
 	spaceChar: "ᚲ",
@@ -30,7 +30,15 @@ var abyssalLang = {
 	commands: ["abyssal", "abyss"]
 }
 
-var langList = [elvenLang, dwarvenLang, draconicLang, abyssalLang];
+var giantLang = {
+	charSet: 'ϑϒζΨΘΫͻͽνϫϗϪϼϽώϯϐϠϰ',
+	spaceFrequency: 0,
+	spaceChar: "",
+	terseness: 0.2,
+	commands: ["giant", "ogre"]
+}
+
+var langList = [elvenLang, dwarvenLang, abyssalLang, giantLang];
 
 var saveThese = "፠᛭";
 
@@ -56,7 +64,7 @@ $(document).ready(function() {
 	$(chat).bind('DOMNodeInserted', function(e) {
 		var msgSent = false;
 		for (var i = 0; i < e.target.classList.length; i++) {
-			if (e.target.classList[i] === "message" && msgsSent < 1) {
+			if (e.target.classList[i] === "message") {
 				var cleansedMsg = cleanseMessageText($(e.target).text());
 				console.log(cleansedMsg);
 				parseMsg(cleansedMsg, "none");
@@ -79,6 +87,24 @@ function parseMsg(msg, name) {
 function cleanseMessageText(msg) {
 	var reg = /:/;
 	return msg.substring(msg.indexOf(reg), msg.length);
+}
+
+//should remove elements as it goes
+function scramble(msg) {
+	var s = "";
+	var msgLength = msg.length
+	for (var i = 0; i < msgLength; i++) {
+		var randIndex = Math.round(Math.random() * msg.length);
+		console.log("index of" + randIndex);
+		s += msg.substring(randIndex, randIndex + 1);
+		msg = spliceSlice(msg, randIndex, 1);
+	}
+	return s;
+}
+
+// http://stackoverflow.com/questions/20817618/is-there-a-splice-method-for-strings
+function spliceSlice(str, index, count, add) {
+  return str.slice(0, index) + (add || "") + str.slice(index + count);
 }
 
 function sendMessage(msg) {

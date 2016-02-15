@@ -1,26 +1,64 @@
 <!DOCTYPE html>
 <html>
-	<link rel="stylesheet" type="text/css" href="../styles/options.css">
-	<link rel="stylesheet" type="text/css" href="../styles/jquery-ui.css">
-	<h1>Enter Characters</h1>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<link rel="stylesheet" type="text/css" href="../styles/options.css">
+		<link rel="stylesheet" type="text/css" href="../styles/jquery-ui.css">
+		<link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+	</head>
+	<!-- <h1>Enter Characters</h1> -->
+	<div class="container">
+		<h1>Enter Character Info</h1>
 
-	<table id="charTable">
-		<tr id="header">
-			<td> <b>Character Name</b> </td>
-			<td> <b>Character Owner</b> </td>
-			<td> <b>Gender Pronoun</b> </td>
-		</tr>
-		<tr>
-			<td> <input type="text" maxLength="20" id="charName" /> </td>
-			<td> <input type="text" maxLength="20" id="colloqName" /> </td>
-			<td> <input type="text" maxLength="5" id="genderPronoun" /> </td>			
-	</table>
+		<table id="charTable">
+			<tr id="header">
+				<td> <b>Character Name</b> </td>
+				<td> <b>Character Owner</b> </td>
+				<td> <b>Gender Pronoun</b> </td>
+			</tr>
+			<tr id="inputRow">
+				<td> <input type="text" maxLength="20" id="charName" /> </td>
+				<td> <input type="text" maxLength="20" id="colloqName" /> </td>
+				<td> <input type="text" maxLength="5" id="genderPronoun" /> </td>			
+		</table>
 
-	<button id="saveButton">Save</button>
+		<button id="saveButton">Save</button>
 
-	<div id="dialog" title="Enter a Whisper">
-		<textarea id="dialogTextArea"></textarea>
-		<button id="dialogSaveButton">Save Whisper</button>
+		<div class="container">
+			<span class="unicodeTest" id="unicodeContainer">&#9839;</span>
+			<span class="unicodeTest" id="unprintableContainer">&#xfffd;</span>
+			<div id="unicodeTestResult">Testing your browser for character set support...</div>
+		</div>
+
+		<div id="dialog" title="Enter a Whisper">
+			<textarea id="dialogTextArea"></textarea>
+			<button id="dialogSaveButton">Save Whisper</button>
+		</div>
+
+		<div id="dialogLang" title="Select All Languages Your Character Speaks">
+			<div class="row">
+				<input id="abyssalCheckbox" type="checkbox"><label for="abyssalCheckbox">Abyssal</label>
+			</div>
+			<!--
+			<div class="row">
+				<input id="draconicCheckbox" type="checkbox"><label for="draconicCheckbox">Draconic</label>
+			</div>
+			-->
+			<div class="row">
+				<input id="dwarvenCheckbox" type="checkbox"><label for="dwarvenCheckbox">Dwarven</label>
+			</div>
+			<div class="row">
+				<input id="elvenCheckbox" type="checkbox"><label for="elvenCheckbox">Elven</label>
+			</div>
+			<div class="row">
+				<input id="deepSpeechCheckbox" type="checkbox"><label for="deepSpeechCheckbox">Deep Speech</label>
+			</div>
+			<div class="row">
+				<input id="giantCheckbox" type="checkbox"><label for="giantCheckbox">Giant</label>
+			</div>
+			<button id="dialogLangButtonSave">Save</button>
+		</div>
+
 	</div>
 
 	<script src="../js/jquery-1.12.0.min.js"></script>

@@ -1,4 +1,5 @@
 html {
+	margin-top: 50px;
 	left: 50%;
 }
 table {
@@ -9,7 +10,17 @@ table {
 	height: 50%;
 	display: none;
 }
+#dialogLang {
+	display: none;
+}
 textarea {
 	width: 98%;
 	height: 90%;
+}
+.unicodeTest {
+	display: none;
+}
+#unicodeTestResult {
+	margin-top: 50px;
+	font-size: 18px;
 }

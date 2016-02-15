@@ -229,6 +229,7 @@ function parseMsg(msg, name) {
 ** Chrome commands
 ------------------
 */
+/*
 chrome.commands.onCommand.addListenener(function(command) {
 	console.log(command);
 	if (command === "start-character-crawl") {
@@ -236,3 +237,4 @@ chrome.commands.onCommand.addListenener(function(command) {
 		alert("please do not touch the keyboard or mouse while character data is being collected");
 	}
 });
+*/
