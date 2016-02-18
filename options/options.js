@@ -94,6 +94,7 @@ function restoreOptions() {
 				});
 				var td1 = $('<td>');
 				td1.html(items.charList[i].charName);
+				td1.id = "charNameCell";
 				$(tr).append(td1);
 				var td2 = $('<td>');
 				td2.html(items.charList[i].colloqName);
@@ -113,27 +114,28 @@ function restoreOptions() {
 			document.getElementById('saveButton').addEventListener('click', saveNewCharacter);
 		}
 	});
-}
-
-function saveLanguagesForCharacter(charName, languages) {
+	//for language options
 	chrome.storage.sync.get({
 		charLanguages: {}
-	}), function(items) {
-		var charLanguages = items.charLanguages;
-		if (charLangauges) {
-			console.log("char languages of " + charLanguages + " already have been saved, overwriting");
-		}
-	}
+	}, function(items) {
+		console.log(items.charLanguages);
+	});
 }
 
-function buildCharLanguagesObjectFromDOM() {
-	var knowsAbyssal = $('#abyssalCheckbox').is(':checked');
-	var konwsDwarven = $('#dwarvenCheckbox').is(':checked');
-	var knowsElven = $('#elvenCheckbox').is(':checked');
-	var knowsDeepSpeech = $('#deepSpeechCheckbox').is(':checked');
-	var knowsGiant = $('#giantCheckbox').is(':checked');
+function saveCharLanguagesObjectFromDOM() {
 	var charLanguages = {};
-	
+	charLanguages.knowsAbyssal = $('#abyssalCheckbox').is(':checked');
+	charLanguages.konwsDwarven = $('#dwarvenCheckbox').is(':checked');
+	charLanguages.knowsElven = $('#elvenCheckbox').is(':checked');
+	charLanguages.knowsDeepSpeech = $('#deepSpeechCheckbox').is(':checked');
+	charLanguages.knowsGiant = $('#giantCheckbox').is(':checked');
+	charLanguages.browserIsUnicodeCompliant = browserIsUnicodeCompliant();
+	charLanguages.charName = $($($('.charRow')[0]).children()[0]).html();
+	chrome.storage.sync.set({
+		charLanguages: charLanguages
+	}, function() {
+		location.reload();
+	});
 }
 
 function saveWhisperForCharacter(charName, whisper) {
@@ -170,14 +172,17 @@ function browserIsUnicodeCompliant() {
 
 $(document).ready(function() {
 	//test browser support for utf-8
-	if (!browserIsUnicodeCompliant()) {
+	if (browserIsUnicodeCompliant()) {
 		$('#unicodeTestResult').css('color', 'GREEN');
 		$('#unicodeTestResult').html('&#x2713; Your browser supports the languages used in this extension');
 	} else {
 		$('#unicodeTestResult').css('color', 'RED');
-		$('#unicodeTestResult').html('&#10007; Your browser does not support the languages used in this extension.\n
-			Try switching to chrome if you are on a different browser or upgrading to the latest version.');
+		$('#unicodeTestResult').html('&#10007; Your browser does not support the languages used in this extension. Try switching to chrome if you are on a different browser or upgrading to the latest version.');
 	}
+});
+
+$('#dialogLangButtonSave').on('click', function() {
+	saveCharLanguagesObjectFromDOM();
 });
 
 document.addEventListener('DOMContentLoaded', restoreOptions);

@@ -54,8 +54,8 @@ $(document).ready(function() {
 				}
 				var cleansedMsg = cleanseMessageText($(e.target).text());
 				var msgSender = parseCharNameFromRawMsg(cleansedMsg);
-				console.log(cleansedMsg);
-				parseMsg(cleansedMsg, msgSender);
+				//console.log(cleansedMsg);
+				parseCommandMsg(cleansedMsg, msgSender);
 				return; //stop the loop after message is found
 			}
 		}
@@ -216,7 +216,7 @@ var reactionResults = [
 	}
 ];
 
-function parseMsg(msg, name) {
+function parseCommandMsg(msg, name) {
 	for (var i = 0; i < commands.length; i++) {
 		if (msg.indexOf(commands[i].cmd) > -1) {
 			randResultFromController(commands[i].results, name);

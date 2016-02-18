@@ -19,7 +19,7 @@ var deepSpeechLang = {
 	spaceFrequency: 0.10,
 	spaceChar: "ᚲ",
 	terseness: 1.10,
-	commands: ["draconic", "dragon"]
+	commands: ["deep", "deepspeech", "deep speech"]
 }
 
 var abyssalLang = {
@@ -53,23 +53,27 @@ function stringToDiffLang(t, lang) {
 			output += lang.charSet[index];
 		}
 	}
-	console.log(output);
 	return output;
 }
 
-var msgsSent = 0;
+var MSG_THROTTLE = 2000;
+var msg_last_sent = 0;
+var lastChatCommand = "";
 $(document).ready(function() {
 	var chat = $('.textchatcontainer')[0];
 	chat = $(chat).children()[1]; //this should be one line
-	$(chat).bind('DOMNodeInserted', function(e) {
-		var msgSent = false;
+	$(chat).bind('DOMNodeInserted', function(e) { //every time a node is inserted into chat
 		for (var i = 0; i < e.target.classList.length; i++) {
-			if (e.target.classList[i] === "message") {
+			var d = new Date();
+			if (e.target.classList[i] === "message" && $(e.target).text() != lastChatCommand && d.getTime() - msg_last_sent >= MSG_THROTTLE) { //if the div is a message
+				console.log('last chat command of ' + lastChatCommand + ' != ' + $(e.target).text());
+				console.log(d.getTime() + ' is more recent than ' + msg_last_sent);
+				lastChatCommand = $(e.target).text();
+				msg_last_sent = d.getTime();
 				var cleansedMsg = cleanseMessageText($(e.target).text());
-				console.log(cleansedMsg);
+				//console.log(cleansedMsg);
 				parseMsg(cleansedMsg, "none");
-				msgsSent++;
-				return; //stop the loop after message is found
+				break;; //stop the loop after message is found
 			}
 		}
 	});
@@ -78,6 +82,7 @@ $(document).ready(function() {
 function parseMsg(msg, name) {
 	for (var i = 0; i < langList.length; i++) {
 		if (msg.indexOf("#" + langList[i].commands[0]) > -1) {
+			console.log('parsing: ' + msg);
 			sendMessage(stringToDiffLang(msg, langList[i]))
 			return;
 		}
@@ -121,4 +126,17 @@ function sendMessage(msg) {
 	chat_text.focused = true;
 	$(chat_text).val(msg);
 	$(sendButton).click();
+}
+
+//this recovers any character options related to this controller 
+//from sync storage. this should be bound do window load
+function recoverOptions() {
+	chrome.sync.storage.get({
+		charLanguages: {}
+	}, function(items) {
+		if (items.charLanguages.charName.length > 0) {
+			console.log('charLanguages for ' + items.charLanguages.charName + ' have been recovered');
+			console.log('browserUnicodeCompliant = ' + charLanguages.browserIsUnicodeCompliant);
+		}
+	})
 }

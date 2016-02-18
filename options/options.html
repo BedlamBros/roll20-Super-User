@@ -2,13 +2,13 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<link rel="stylesheet" type="text/css" href="../styles/options.css">
 		<link rel="stylesheet" type="text/css" href="../styles/jquery-ui.css">
 		<link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="../styles/options.css">
 	</head>
 	<!-- <h1>Enter Characters</h1> -->
 	<div class="container">
-		<h1>Enter Character Info</h1>
+		<h1 id="prompt">Enter Character Info</h1>
 
 		<table id="charTable">
 			<tr id="header">
@@ -30,12 +30,12 @@
 			<div id="unicodeTestResult">Testing your browser for character set support...</div>
 		</div>
 
-		<div id="dialog" title="Enter a Whisper">
+		<div id="dialogWhisper" class="dialog" title="Enter a Whisper">
 			<textarea id="dialogTextArea"></textarea>
 			<button id="dialogSaveButton">Save Whisper</button>
 		</div>
 
-		<div id="dialogLang" title="Select All Languages Your Character Speaks">
+		<div id="dialogLang"  class="dialog" title="Select All Languages Your Character Speaks">
 			<div class="row">
 				<input id="abyssalCheckbox" type="checkbox"><label for="abyssalCheckbox">Abyssal</label>
 			</div>

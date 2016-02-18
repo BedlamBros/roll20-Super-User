@@ -5,13 +5,21 @@ html {
 table {
 	font-size: 18px;
 }
-#dialog {
-	width: 50%;
-	height: 50%;
+td {
+	padding: 5px;
+	width: 200px;
+	border: 1px solid #0F0F0F;
+}
+#dialogWhisper {
 	display: none;
 }
 #dialogLang {
 	display: none;
+	font-size: 18px;
+}
+.ui-dialog {
+	width: 400px;
+	height: 300px;
 }
 textarea {
 	width: 98%;
