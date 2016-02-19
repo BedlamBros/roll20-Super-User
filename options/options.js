@@ -7,7 +7,7 @@ function saveNewCharacter() {
 	var character = {};
 	var charName = document.getElementById('charName').value;
 	var colloqName = document.getElementById('colloqName').value;
-	var genderPronoun = document.getElementById('genderPronoun').value;
+	var genderPronoun = $($('select')[0]).find(':selected').text();
 	if (charName == '' || colloqName == '' || genderPronoun == ''){
 		alert('No fields may be empty');
 		return;
@@ -125,7 +125,7 @@ function restoreOptions() {
 function saveCharLanguagesObjectFromDOM() {
 	var charLanguages = {};
 	charLanguages.knowsAbyssal = $('#abyssalCheckbox').is(':checked');
-	charLanguages.konwsDwarven = $('#dwarvenCheckbox').is(':checked');
+	charLanguages.knowsDwarven = $('#dwarvenCheckbox').is(':checked');
 	charLanguages.knowsElven = $('#elvenCheckbox').is(':checked');
 	charLanguages.knowsDeepSpeech = $('#deepSpeechCheckbox').is(':checked');
 	charLanguages.knowsGiant = $('#giantCheckbox').is(':checked');
@@ -171,13 +171,15 @@ function browserIsUnicodeCompliant() {
 }
 
 $(document).ready(function() {
+	//enable tooltips
+	$('[data-toggle="tooltip"]').tooltip(); 
 	//test browser support for utf-8
 	if (browserIsUnicodeCompliant()) {
 		$('#unicodeTestResult').css('color', 'GREEN');
-		$('#unicodeTestResult').html('&#x2713; Your browser supports the languages used in this extension');
+		$('#unicodeTestResult').html('&#x2713; Your browser supports the fonts used in this extension');
 	} else {
 		$('#unicodeTestResult').css('color', 'RED');
-		$('#unicodeTestResult').html('&#10007; Your browser does not support the languages used in this extension. Try switching to chrome if you are on a different browser or upgrading to the latest version.');
+		$('#unicodeTestResult').html('&#10007; Your browser does not support the fonts used in this extension. Try switching to chrome if you are on a different browser or upgrading to the latest version.');
 	}
 });
 

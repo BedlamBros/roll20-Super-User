@@ -8,21 +8,34 @@
 	</head>
 	<!-- <h1>Enter Characters</h1> -->
 	<div class="container">
-		<h1 id="prompt">Enter Character Info</h1>
+		<h1 id="prompt">Enter Your Character Info</h1>
+
+		<nav>
+			<ul class="pager">
+				<li class="default"><a href="#">Languages</a></li>
+				<li class="disabled"><a href="#DM">DM Options</a></li>
+			</ul>
+		</nav>
 
 		<table id="charTable">
 			<tr id="header">
-				<td> <b>Character Name</b> </td>
-				<td> <b>Character Owner</b> </td>
-				<td> <b>Gender Pronoun</b> </td>
+				<td> <b data-toggle="tooltip" title="The name of the character you play.">Character Name</b> </td>
+				<td> <b data-toggle="tooltip" title="Your name listed in Roll20 chat. This is not necessarily the name of your character.">Character Owner</b> </td>
+				<td> <b data-toggle="tooltip" title="The pronouns that should be used to narrate your character's actions.">Gender</b> </td>
 			</tr>
 			<tr id="inputRow">
 				<td> <input type="text" maxLength="20" id="charName" /> </td>
 				<td> <input type="text" maxLength="20" id="colloqName" /> </td>
-				<td> <input type="text" maxLength="5" id="genderPronoun" /> </td>			
+				<td>
+				<select name="gender">
+					<option value="male">Male</option>
+					<option value="female">Female</option>
+					<option value="N/A">N/A</option>
+					<option value="unknown">Unknown</option>
+				</select>
 		</table>
 
-		<button id="saveButton">Save</button>
+		<button id="saveButton" class="btn btn-default">Save</button>
 
 		<div class="container">
 			<span class="unicodeTest" id="unicodeContainer">&#9839;</span>
@@ -61,7 +74,8 @@
 
 	</div>
 
-	<script src="../js/jquery-1.12.0.min.js"></script>
-	<script src="../js/jquery-ui.js"></script>
-	<script src="options.js"></script>
+	<script type="text/javascript" src="../js/jquery-1.12.0.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-ui.js"></script>
+	<script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="options.js"></script>
 </html>

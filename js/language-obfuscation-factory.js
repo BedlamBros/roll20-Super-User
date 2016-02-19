@@ -19,7 +19,7 @@ var deepSpeechLang = {
 	spaceFrequency: 0.10,
 	spaceChar: "ᚲ",
 	terseness: 1.10,
-	commands: ["deep", "deepspeech", "deep speech"]
+	commands: ["deepSpeech", "deep", "deepspeech", "deep speech"]
 }
 
 var abyssalLang = {
@@ -66,18 +66,55 @@ $(document).ready(function() {
 		for (var i = 0; i < e.target.classList.length; i++) {
 			var d = new Date();
 			if (e.target.classList[i] === "message" && $(e.target).text() != lastChatCommand && d.getTime() - msg_last_sent >= MSG_THROTTLE) { //if the div is a message
-				console.log('last chat command of ' + lastChatCommand + ' != ' + $(e.target).text());
-				console.log(d.getTime() + ' is more recent than ' + msg_last_sent);
+				//console.log('last chat command of ' + lastChatCommand + ' != ' + $(e.target).text());
+				//console.log(d.getTime() + ' is more recent than ' + msg_last_sent);
 				lastChatCommand = $(e.target).text();
 				msg_last_sent = d.getTime();
 				var cleansedMsg = cleanseMessageText($(e.target).text());
 				//console.log(cleansedMsg);
-				parseMsg(cleansedMsg, "none");
-				break;; //stop the loop after message is found
+				setMsgVisibility(e.target, cleansedMsg);
+				break; //stop the loop after message is found
 			}
 		}
 	});
 });
+
+function setMsgVisibility(node, msg) {
+	if (char_languages) {
+		for (var i = 0; i < langList.length; i++) {
+			for (var i2 = 0; i2 < langList[i].commands.length; i2++) {
+				if (msg.indexOf("#" + langList[i].commands[i2]) > -1) {
+					if (!characterSpeaksLanguage(langList[i].commands[0])) {
+						console.log(char_languages.charName + ' does not speak ' + langList[i].commands[0]);
+						$(node).css({'display': 'none'});
+					} else {
+						parseMsg(msg);
+					}
+				}
+			}
+		}
+	} else {
+		console.log("char_languages not yet set");
+	}
+}
+
+//returns boolean
+function characterSpeaksLanguage(lang) {
+	switch (lang){
+		case "dwarven":
+			return char_languages.knowsDwarven;
+		case "elven":
+			return char_languages.knowsElven;
+		case "abyssal":
+			return char_languages.knowsAbyssal;
+		case "deepSpeech":
+			return char_languages.knowsDeepSpeech;
+		case "giant":
+			return char_languages.knowsGiant;
+		default:
+			return false;
+	}
+}
 
 function parseMsg(msg, name) {
 	for (var i = 0; i < langList.length; i++) {
@@ -130,13 +167,16 @@ function sendMessage(msg) {
 
 //this recovers any character options related to this controller 
 //from sync storage. this should be bound do window load
-function recoverOptions() {
-	chrome.sync.storage.get({
-		charLanguages: {}
-	}, function(items) {
-		if (items.charLanguages.charName.length > 0) {
-			console.log('charLanguages for ' + items.charLanguages.charName + ' have been recovered');
-			console.log('browserUnicodeCompliant = ' + charLanguages.browserIsUnicodeCompliant);
-		}
-	})
+var char_languages = {};
+function recoverOptions(charLanguages) {
+	char_languages = charLanguages;
 }
+
+$(document).ready(function() {
+	console.log('requesting localstorage from background page');
+
+});
+chrome.runtime.sendMessage({method: "getLocalStorage"}, function(response) {
+	console.log(response.data);
+	recoverOptions(response.data);
+});

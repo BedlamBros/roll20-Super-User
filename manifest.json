@@ -15,8 +15,7 @@
 
   "author": "@FAJITA_MANE",
   "background": {
-    "scripts": ["js/jquery-1.12.0.min.js"],
-    "persistent": false
+    "scripts": ["js/jquery-1.12.0.min.js", "js/options-messager.js"]
   },
   "commands": {
     "start-character-crawl": {

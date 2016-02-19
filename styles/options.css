@@ -4,14 +4,24 @@ html {
 }
 table {
 	font-size: 18px;
+	margin-bottom: 10px;
 }
 td {
 	padding: 5px;
 	width: 200px;
 	border: 1px solid #0F0F0F;
 }
+#header {
+	cursor: default;
+}
+#saveButton {
+	font-size: 18px;
+}
 #dialogWhisper {
 	display: none;
+}
+.default {
+	background-color: #ddd;
 }
 #dialogLang {
 	display: none;
