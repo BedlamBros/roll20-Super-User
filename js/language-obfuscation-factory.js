@@ -11,7 +11,7 @@ var dwarvenLang = {
 	spaceFrequency: 0.10,
 	spaceChar: "\n",
 	terseness: 1.25,
-	commands: ["dwarven", "dwarf", "dwarvin"]
+	commands: ["dwarven", "dwarf", "dwarvin", "dwarve"]
 };
 
 var deepSpeechLang = {
@@ -20,6 +20,14 @@ var deepSpeechLang = {
 	spaceChar: "ᚲ",
 	terseness: 1.10,
 	commands: ["deepSpeech", "deep", "deepspeech", "deep speech"]
+}
+
+var goblinLang = {
+	charSet: "ぐこぃいつぴづしゖょじべぺにるれろゝのゞく",
+	spaceFrequency: 0.3,
+	spaceChar: "\ ",
+	terseness: 2,
+	commands: ["goblin", "goblish", "goblinLang"]
 }
 
 var abyssalLang = {
@@ -35,10 +43,18 @@ var giantLang = {
 	spaceFrequency: 0,
 	spaceChar: "",
 	terseness: 0.2,
-	commands: ["giant", "ogre"]
+	commands: ["giant", "ogre", "giantish"]
 }
 
-var langList = [elvenLang, dwarvenLang, abyssalLang, giantLang];
+var draconicLang = {
+	charSet: 'ᎠᏇᏨᎺᎰᏠᏡᏰᏱᏲᏲᏫᏎᎿᎭᎨᎸ',
+	spaceFrequency: 0.85,
+	spaceChar: "\ ",
+	terseness: 2,
+	commands: ["draconic", "dragon", "dragonborn", "dragonlang", "draconiclang"]
+}
+
+var langList = [elvenLang, dwarvenLang, abyssalLang, giantLang, goblinLang, draconicLang, deepSpeechLang, goblinLang];
 
 var saveThese = "፠᛭";
 
@@ -55,7 +71,8 @@ function stringToDiffLang(t, lang) {
 	}
 	return output;
 }
-
+var MSG_THROTTLE_DELAY = 30 * 1000; //30s for the chat to load old messages we want to filter
+var page_load = new Date();
 var MSG_THROTTLE = 2000;
 var msg_last_sent = 0;
 var lastChatCommand = "";
@@ -68,18 +85,22 @@ $(document).ready(function() {
 			if (e.target.classList[i] === "message" && $(e.target).text() != lastChatCommand && d.getTime() - msg_last_sent >= MSG_THROTTLE) { //if the div is a message
 				//console.log('last chat command of ' + lastChatCommand + ' != ' + $(e.target).text());
 				//console.log(d.getTime() + ' is more recent than ' + msg_last_sent);
+				var page_is_loading = page_load.getTime() - d.getTime() > MSG_THROTTLE_DELAY;
+				if (page_is_loading) {
+					console.log('page is still loading');
+				}
 				lastChatCommand = $(e.target).text();
 				msg_last_sent = d.getTime();
 				var cleansedMsg = cleanseMessageText($(e.target).text());
 				//console.log(cleansedMsg);
-				setMsgVisibility(e.target, cleansedMsg);
+				setMsgVisibility(e.target, cleansedMsg, page_is_loading);
 				break; //stop the loop after message is found
 			}
 		}
 	});
 });
 
-function setMsgVisibility(node, msg) {
+function setMsgVisibility(node, msg, is_loading) {
 	if (char_languages) {
 		for (var i = 0; i < langList.length; i++) {
 			for (var i2 = 0; i2 < langList[i].commands.length; i2++) {
@@ -88,7 +109,9 @@ function setMsgVisibility(node, msg) {
 						console.log(char_languages.charName + ' does not speak ' + langList[i].commands[0]);
 						$(node).css({'display': 'none'});
 					} else {
-						parseMsg(msg);
+						if (!is_loading) {
+							parseMsg(msg);
+						}
 					}
 				}
 			}
@@ -111,6 +134,10 @@ function characterSpeaksLanguage(lang) {
 			return char_languages.knowsDeepSpeech;
 		case "giant":
 			return char_languages.knowsGiant;
+		case "draconic":
+			return char_languages.knowsDraconic;
+		case "goblin":
+			return char_languages.knowsGoblin;
 		default:
 			return false;
 	}
@@ -118,10 +145,12 @@ function characterSpeaksLanguage(lang) {
 
 function parseMsg(msg, name) {
 	for (var i = 0; i < langList.length; i++) {
-		if (msg.indexOf("#" + langList[i].commands[0]) > -1) {
-			console.log('parsing: ' + msg);
-			sendMessage(stringToDiffLang(msg, langList[i]))
-			return;
+		for (var i_lang = 0;i_lang < langList[i].commands.length; i_lang++){
+			if (msg.indexOf("#" + langList[i].commands[i_lang]) > -1) {
+				console.log('parsing: ' + msg);
+				sendMessage(stringToDiffLang(msg, langList[i]))
+				return;
+			}
 		}
 	}
 }

@@ -119,6 +119,13 @@ function restoreOptions() {
 		charLanguages: {}
 	}, function(items) {
 		console.log(items.charLanguages);
+		$('#abyssalCheckbox').attr('checked', items.charLanguages.knowsAbyssal);
+		$('#dwarvenCheckbox').attr('checked', items.charLanguages.knowsDwarven);
+		$('#elvenCheckbox').attr('checked', items.charLanguages.knowsElven);
+		$('#deepSpeechCheckbox').attr('checked', items.charLanguages.knowsDeepSpeech);
+		$('#giantCheckbox').attr('checked', items.charLanguages.knowsGiant);
+		$('#draconicCheckbox').attr('checked', items.charLanguages.knowsDraconic);
+		$('#goblinCheckbox').attr('checked', items.charLanguages.knowsGoblin);
 	});
 }
 
@@ -129,7 +136,10 @@ function saveCharLanguagesObjectFromDOM() {
 	charLanguages.knowsElven = $('#elvenCheckbox').is(':checked');
 	charLanguages.knowsDeepSpeech = $('#deepSpeechCheckbox').is(':checked');
 	charLanguages.knowsGiant = $('#giantCheckbox').is(':checked');
+	charLanguages.knowsDraconic = $('#draconicCheckbox').is(':checked');
+	charLanguages.knowsGoblin = $('#goblinCheckbox').is(':checked');
 	charLanguages.browserIsUnicodeCompliant = browserIsUnicodeCompliant();
+	charLanguages.userIsDM = USER_IS_DM;
 	charLanguages.charName = $($($('.charRow')[0]).children()[0]).html();
 	chrome.storage.sync.set({
 		charLanguages: charLanguages
